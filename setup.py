@@ -1,4 +1,5 @@
 import pathlib
+
 from setuptools import setup, find_packages
 
 README = (pathlib.Path(__file__).parent / "README.md").read_text()
@@ -20,8 +21,7 @@ setup(
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
     ],
-    packages=find_packages('src'),
-    package_dir={'': 'src'},
+    packages=find_packages(),
     include_package_data=True,
     version='1.0.0'
 )

@@ -2,7 +2,7 @@ import dataclasses
 import typing
 
 from typing import Optional, Any
-from src.config_sources import ConfigSource
+from .config_sources import ConfigSource
 
 TRUE_VALUES = {'true', 'yes', 'on', '1', 1, True}
 FALSE_VALUES = {'false', 'no', 'off', '0', 0, False}
