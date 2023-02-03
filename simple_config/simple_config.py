@@ -7,8 +7,10 @@ from simple_config.config_sources import ConfigSource
 TRUE_VALUES = {'true', 'yes', 'on', '1', 1, True}
 FALSE_VALUES = {'false', 'no', 'off', '0', 0, False}
 
+DataclassType = typing.TypeVar('DataclassType')
 
-def load_config(config_class, config_source: ConfigSource):
+
+def load_config(config_class: DataclassType, config_source: ConfigSource) -> DataclassType:
     """
     Accepts a dataclass and a config source and returns an instance of the dataclass with loaded config values
     """
