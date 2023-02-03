@@ -31,7 +31,7 @@ def test_create_config_success():
                 'g': '1',
             }.get(key)
 
-    config = simple_config.get_config(Config, MockConfigSource())
+    config = simple_config.load_config(Config, MockConfigSource())
     assert config == Config('a', 1, True, False, 1.1, None, 1, 'default')
 
 
@@ -45,7 +45,7 @@ def test_fail_create_config_missing_field():
             return None
 
     with pytest.raises(simple_config.ConfigException):
-        simple_config.get_config(Config, MockConfigSource())
+        simple_config.load_config(Config, MockConfigSource())
 
 
 def test_fail_create_config_invalid_float():
@@ -60,7 +60,7 @@ def test_fail_create_config_invalid_float():
             }.get(key)
 
     with pytest.raises(simple_config.ConfigException):
-        simple_config.get_config(Config, MockConfigSource())
+        simple_config.load_config(Config, MockConfigSource())
 
 
 def test_fail_create_config_invalid_bool():
@@ -75,7 +75,7 @@ def test_fail_create_config_invalid_bool():
             }.get(key)
 
     with pytest.raises(simple_config.ConfigException):
-        simple_config.get_config(Config, MockConfigSource())
+        simple_config.load_config(Config, MockConfigSource())
 
 
 def test_fail_create_config_invalid_config_class():
@@ -83,7 +83,7 @@ def test_fail_create_config_invalid_config_class():
         pass
 
     with pytest.raises(TypeError):
-        simple_config.get_config(NotAConfig, config_sources.EnvVarsConfigSource())
+        simple_config.load_config(NotAConfig, config_sources.EnvVarsConfigSource())
 
 
 def test_create_config_success_from_ini():
@@ -92,7 +92,7 @@ def test_create_config_success_from_ini():
         float_val: float
         int_val: int
 
-    config = simple_config.get_config(
+    config = simple_config.load_config(
         Config, config_sources.IniFileFlatConfigSource(f'{current_dir}/data/test_config.ini')
     )
     assert config == Config(1.0, 2)
@@ -112,7 +112,7 @@ def test_create_config_success_from_interpolation():
                 'str_val': 'string',
             }.get(key)
 
-    config = simple_config.get_config(
+    config = simple_config.load_config(
         Config,
         config_sources.ConfigSourceInterpolation([
             config_sources.IniFileFlatConfigSource(f'{current_dir}/data/test_config.ini'),

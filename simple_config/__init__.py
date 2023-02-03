@@ -1,2 +1,3 @@
-from .simple_config import get_config, ConfigException
+from . import config_sources
+from .simple_config import load_config, ConfigException
 from .config_sources import *

@@ -8,7 +8,7 @@ TRUE_VALUES = {'true', 'yes', 'on', '1', 1, True}
 FALSE_VALUES = {'false', 'no', 'off', '0', 0, False}
 
 
-def get_config(config_class, config_source: ConfigSource):
+def load_config(config_class, config_source: ConfigSource):
     """
     Accepts a dataclass and a config source and returns an instance of the dataclass with loaded config values
     """
