@@ -2,7 +2,7 @@ import os
 import pytest
 
 from dataclasses import dataclass
-from src import config_sources, simple_config
+from simple_config import config_sources, simple_config
 from typing import Optional
 
 current_dir = os.path.dirname(os.path.realpath(__file__))
@@ -104,7 +104,7 @@ def test_create_config_success_from_interpolation():
         float_val: float
         int_val: int
         str_val: str
-    
+
     class MockConfigSource(config_sources.EnvVarsConfigSource):
         def get_key(self, key):
             return {

@@ -2,7 +2,7 @@ import dataclasses
 import typing
 
 from typing import Optional, Any
-from .config_sources import ConfigSource
+from simple_config.config_sources import ConfigSource
 
 TRUE_VALUES = {'true', 'yes', 'on', '1', 1, True}
 FALSE_VALUES = {'false', 'no', 'off', '0', 0, False}
@@ -79,7 +79,7 @@ def get_args(t: typing.Type):
 
 
 def get_origin(t: typing.Type):
-    getattr(t, '__origin__', None)
+    return getattr(t, '__origin__', None)
 
 
 class ConfigException(Exception):
