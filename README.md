@@ -13,6 +13,7 @@ import simple_config
 from dataclasses import dataclass
 from typing import Any, Optional
 
+
 class DummyConfigSource(simple_config.ConfigSource):
     def get_key(self, key: str) -> Optional[Any]:
             return {
@@ -45,6 +46,7 @@ import simple_config
 
 from dataclasses import dataclass
 
+
 @dataclass
 class Config:
     host: str
@@ -54,8 +56,8 @@ class Config:
 config = simple_config.load_config(
     Config,
     simple_config.ConfigSourceInterpolation([
-        simple_config.EnvVarsConfigSource(),
         simple_config.CommandLineArgsConfigSource(),
+        simple_config.EnvVarsConfigSource(),
     ])
 )
 ```
