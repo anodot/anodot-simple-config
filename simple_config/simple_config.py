@@ -1,8 +1,9 @@
 import dataclasses
 import typing
 
-from typing import Any, Optional, Type
+from enum import EnumMeta
 from simple_config.config_sources import ConfigSource
+from typing import Any, Optional, Type
 
 TRUE_VALUES = {'true', 'yes', 'on', '1', 1, True}
 FALSE_VALUES = {'false', 'no', 'off', '0', 0, False}
@@ -50,9 +51,11 @@ def _cast_to_config_field_type(field: dataclasses.Field, value):
     try:
         return _cast_to_bool(value) if type_ is bool else type_(value)
     except ValueError:
-        raise ConfigException(
-            f'Failed to convert value `{value}` to the type {type_}'
-        )
+        message = f'Failed to convert value `{value}` to the type {type_}'
+        if isinstance(type_, EnumMeta):
+            message += ', the value must be one of: ' + ', '.join(x.value for x in type_)
+
+        raise ConfigException(message)
 
 
 def _cast_to_bool(value) -> bool:
@@ -72,7 +75,7 @@ def is_optional(field: dataclasses.Field) -> bool:
 
 def extract_type_from_optional(type_: typing.Type) -> typing.Type:
     for type_ in get_args(type_):
-        if not isinstance(type_,  type(None)):
+        if not isinstance(type_, type(None)):
             return type_
 
 

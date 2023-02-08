@@ -2,6 +2,7 @@ import os
 import pytest
 
 from dataclasses import dataclass
+from enum import Enum
 from simple_config import config_sources, simple_config
 from typing import Optional
 
@@ -9,6 +10,10 @@ current_dir = os.path.dirname(os.path.realpath(__file__))
 
 
 def test_create_config_success():
+    class SomeEnum(Enum):
+        A = 'a'
+        B = 'b'
+
     @dataclass
     class Config:
         a: str
@@ -16,6 +21,7 @@ def test_create_config_success():
         c: bool
         d: bool
         e: float
+        enum_value: SomeEnum
         f: Optional[str]
         g: Optional[int]
         h: str = 'default'
@@ -28,11 +34,12 @@ def test_create_config_success():
                 'c': 'true',
                 'd': 0,
                 'e': '1.1',
+                'enum_value': 'b',
                 'g': '1',
             }.get(key)
 
     config = simple_config.load_config(Config, MockConfigSource())
-    assert config == Config('a', 1, True, False, 1.1, None, 1, 'default')
+    assert config == Config('a', 1, True, False, 1.1, SomeEnum('b'), None, 1, 'default')
 
 
 def test_fail_create_config_missing_field():
@@ -72,6 +79,25 @@ def test_fail_create_config_invalid_bool():
         def get_key(self, key):
             return {
                 'invalid_bool_1': 'not_a_bool',
+            }.get(key)
+
+    with pytest.raises(simple_config.ConfigException):
+        simple_config.load_config(Config, MockConfigSource())
+
+
+def test_fail_create_config_invalid_enum():
+    class SomeEnum(Enum):
+        A = 'a'
+        B = 'b'
+
+    @dataclass
+    class Config:
+        enum_val: SomeEnum
+
+    class MockConfigSource(config_sources.EnvVarsConfigSource):
+        def get_key(self, key):
+            return {
+                'enum_val': 'c',
             }.get(key)
 
     with pytest.raises(simple_config.ConfigException):
