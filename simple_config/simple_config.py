@@ -39,14 +39,20 @@ def load_config(config_class: Type[DataclassType], config_source: ConfigSource) 
 
 def _extract_value(config_source: ConfigSource, field: dataclasses.Field) -> Optional[Any]:
     value = config_source.get_key(field.name)
-    if value is None and field.default is not dataclasses.MISSING:
+    if value is None and _has_default_value(field):
         value = field.default
-    if value is not None:
+    elif value is not None:
         value = _cast_to_config_field_type(field, value)
     return value
 
 
-def _cast_to_config_field_type(field: dataclasses.Field, value):
+def _has_default_value(field: dataclasses.Field):
+    return field.default is not dataclasses.MISSING
+
+
+def _cast_to_config_field_type(field: dataclasses.Field, value: Any):
+    if value is None:
+        raise ValueError('Expecting a non-None value')
     type_ = extract_type_from_optional(field.type) if is_optional(field) else field.type
     try:
         return _cast_to_bool(value) if type_ is bool else type_(value)
