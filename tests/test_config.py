@@ -117,11 +117,12 @@ def test_create_config_success_from_ini():
     class Config:
         float_val: float
         int_val: int
+        emtpy_field: Optional[int] = 10
 
     config = simple_config.load_config(
         Config, config_sources.IniFileFlatConfigSource(f'{current_dir}/data/test_config.ini')
     )
-    assert config == Config(1.0, 2)
+    assert config == Config(1.0, 2, 10)
 
 
 def test_create_config_success_from_interpolation():
