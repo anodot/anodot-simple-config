@@ -34,7 +34,12 @@ class CommandLineArgsConfigSource(ConfigSource):
 
 class IniFileFlatConfigSource(ConfigSource):
     """
-    Config source that reads key from all sections from an .ini file, ALL keys must be unique.
+    Config source that reads keys from all sections from an .ini file, ALL keys must be unique.
+
+    WARNING: please be aware that keys in the config file that are specified as `key =` (without a value)
+    will be loaded as an empty string, not None, so the default value from the dataclass will not be applied
+    and type casting of that field will fail if it is not a string.
+    If you want to specify a key without a value, use `key` (without the `=` sign).
     """
 
     def __init__(self, file_path: str):
@@ -42,7 +47,7 @@ class IniFileFlatConfigSource(ConfigSource):
             raise FileNotFoundError(f'Config file not found: {file_path}')
 
         self.flat_config = {}
-        config = configparser.ConfigParser()
+        config = configparser.ConfigParser(allow_no_value=True)
         config.read(file_path)
 
         for section in config.sections():
