@@ -26,7 +26,7 @@ def test_create_config_success():
         g: Optional[int]
         h: str = 'default'
 
-    class MockConfigSource(config_sources.EnvVarsConfigSource):
+    class MockConfigSource(config_sources.ConfigSource):
         def get_key(self, key):
             return {
                 'a': 'a',
@@ -47,7 +47,7 @@ def test_fail_create_config_missing_field():
     class Config:
         not_existing: str
 
-    class MockConfigSource(config_sources.EnvVarsConfigSource):
+    class MockConfigSource(config_sources.ConfigSource):
         def get_key(self, key):
             return None
 
@@ -60,7 +60,7 @@ def test_fail_create_config_invalid_float():
     class Config:
         float_val: float
 
-    class MockConfigSource(config_sources.EnvVarsConfigSource):
+    class MockConfigSource(config_sources.ConfigSource):
         def get_key(self, key):
             return {
                 'float_val': 'not_a_float',
@@ -75,7 +75,7 @@ def test_fail_create_config_invalid_bool():
     class Config:
         invalid_bool_1: bool
 
-    class MockConfigSource(config_sources.EnvVarsConfigSource):
+    class MockConfigSource(config_sources.ConfigSource):
         def get_key(self, key):
             return {
                 'invalid_bool_1': 'not_a_bool',
@@ -94,7 +94,7 @@ def test_fail_create_config_invalid_enum():
     class Config:
         enum_val: SomeEnum
 
-    class MockConfigSource(config_sources.EnvVarsConfigSource):
+    class MockConfigSource(config_sources.ConfigSource):
         def get_key(self, key):
             return {
                 'enum_val': 'c',
@@ -131,7 +131,7 @@ def test_create_config_success_from_interpolation():
         int_val: int
         str_val: str
 
-    class MockConfigSource(config_sources.EnvVarsConfigSource):
+    class MockConfigSource(config_sources.ConfigSource):
         def get_key(self, key):
             return {
                 'int_val': 10,
